@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">WeatherApp</string>
+    <string name="load">Load</string>
+    <string name="min_temp">Min: </string>
+    <string name="max_temp">Max: </string>
+    <string name="info_min_temp">Min: </string>
+    <string name="info_max_temp">Max: </string>
+</resources>
