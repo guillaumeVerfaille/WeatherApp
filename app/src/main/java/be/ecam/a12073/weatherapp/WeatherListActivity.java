@@ -2,11 +2,13 @@ package be.ecam.a12073.weatherapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,13 +20,16 @@ import org.json.JSONException;
 
 import java.io.IOException;
 
-public class WeatherListActivity extends AppCompatActivity implements ItemAdapter.ItemAdapterOnClickHandler, LoaderManager.LoaderCallbacks<String> {
+public class WeatherListActivity extends AppCompatActivity implements ItemAdapter.ItemAdapterOnClickHandler, LoaderManager.LoaderCallbacks<String>, SharedPreferences.OnSharedPreferenceChangeListener {
     private static final int QUERY_LOADER = 22;
     private ItemAdapter itemAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.settings, new SettingsFragment())
+                .commit();
         setContentView(R.layout.activity_weather_list);
 
         RecyclerView resultView = (RecyclerView) findViewById(R.id.resultView);
@@ -35,6 +40,9 @@ public class WeatherListActivity extends AppCompatActivity implements ItemAdapte
 
         itemAdapter = new ItemAdapter(this);
         resultView.setAdapter(itemAdapter);
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -157,5 +165,12 @@ public class WeatherListActivity extends AppCompatActivity implements ItemAdapte
     @Override
     public void onLoaderReset(Loader<String> loader) {
 
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals("my_name")) {
+            Toast.makeText(this, "Test", Toast.LENGTH_SHORT).show();
+        }
     }
 }
